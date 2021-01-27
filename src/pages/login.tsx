@@ -1,14 +1,35 @@
+import { gql, useMutation } from "@apollo/client";
 import React from "react";
 import { useForm } from "react-hook-form";
+import { FormError } from "../components/form-error";
+
+const LOGIN_MUTATION = gql`
+  mutation PotatoMutation($email: String!, $password: String!) {
+    login(input: { email: $email, password: $password }) {
+      ok
+      token
+      error
+    }
+  }
+`;
 
 interface ILoginForm {
-  email?: string;
-  password?: string;
+  email: string;
+  password: string;
 }
 
 export const Login = () => {
   const { register, getValues, errors, handleSubmit } = useForm<ILoginForm>();
-  const onSubmit = () => {};
+  const [loginMutation] = useMutation(LOGIN_MUTATION);
+  const onSubmit = () => {
+    const { email, password } = getValues();
+    loginMutation({
+      variables: {
+        email,
+        password: 12345678,
+      },
+    });
+  };
 
   return (
     <div className="h-screen flex items-center justify-center bg-gray-800">
@@ -27,9 +48,7 @@ export const Login = () => {
             required
           />
           {errors.email?.message && (
-            <span className="font-medium text-red-500">
-              {errors.email?.message}
-            </span>
+            <FormError errorMessage={errors.email?.message} />
           )}
           <input
             ref={register({ required: "Password is required", minLength: 8 })}
@@ -40,14 +59,10 @@ export const Login = () => {
             required
           />
           {errors.password?.message && (
-            <span className="font-medium text-red-500">
-              {errors.password?.message}
-            </span>
+            <FormError errorMessage={errors.password?.message} />
           )}
           {errors.password?.type === "minLength" && (
-            <span className="font-medium text-red-500">
-              Password must be more than 8 characters.
-            </span>
+            <FormError errorMessage="Password must be more than 8 characters." />
           )}
           <button className="mt-3 btn">Log In</button>
         </form>
