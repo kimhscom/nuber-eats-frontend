@@ -1,5 +1,6 @@
 import { gql, useApolloClient, useMutation } from "@apollo/client";
 import React, { useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import { useMe } from "../../hooks/useMe";
 import {
   verifyEmail,
@@ -19,6 +20,8 @@ export const ConfirmEmail = () => {
   const { data: userData } = useMe();
 
   const client = useApolloClient();
+  const history = useHistory();
+
   const onCompleted = (data: verifyEmail) => {
     const {
       verifyEmail: { ok },
@@ -36,6 +39,7 @@ export const ConfirmEmail = () => {
           verified: true,
         },
       });
+      history.push("/");
     }
   };
 
@@ -45,6 +49,7 @@ export const ConfirmEmail = () => {
   );
 
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [_, code] = window.location.href.split("code=");
     verifyEmail({
       variables: {
@@ -53,7 +58,7 @@ export const ConfirmEmail = () => {
         },
       },
     });
-  }, []);
+  }, [verifyEmail]);
 
   return (
     <div className="mt-52 flex flex-col items-center justify-center">
