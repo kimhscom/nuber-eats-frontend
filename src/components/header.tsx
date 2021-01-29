@@ -11,19 +11,21 @@ export const Header: React.FC = () => {
   return (
     <>
       {!data?.me.verified && (
-        <div className="bg-red-500 p-3 text-center text-xs text-white">
+        <div className="bg-red-500 p-3 text-center text-base text-white">
           <span>Please verify your email.</span>
         </div>
       )}
 
       <header className="py-4">
         <div className="w-full px-5 xl:px-0 max-w-screen-2xl mx-auto flex justify-between items-center">
-          <img src={nuberLogo} className="w-24" alt="Nuber Eats" />
-          <span className="text-xs">
-            <Link to="/edit-profile">
+          <Link to="/">
+            <img src={nuberLogo} className="w-36" alt="Nuber Eats" />
+          </Link>
+          <Link to="/edit-profile">
+            <span className="text-xs">
               <FontAwesomeIcon icon={faUser} className="text-xl" />
-            </Link>
-          </span>
+            </span>
+          </Link>
         </div>
       </header>
     </>
