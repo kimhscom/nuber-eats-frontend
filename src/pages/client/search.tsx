@@ -47,7 +47,7 @@ export const Search = () => {
         },
       },
     });
-  }, [history, location]);
+  }, [callQuery, history, location]);
   console.log(loading, data, called);
 
   return (
