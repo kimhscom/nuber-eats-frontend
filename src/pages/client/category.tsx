@@ -29,6 +29,7 @@ interface ICategoryParams {
 
 export const Category = () => {
   const params = useParams<ICategoryParams>();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { data, loading } = useQuery<category, categoryVariables>(
     CATEGORY_QUERY,
     {
