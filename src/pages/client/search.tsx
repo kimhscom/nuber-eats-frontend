@@ -33,7 +33,7 @@ export const Search = () => {
   const [page, setPage] = useState(1);
   const location = useLocation();
   const history = useHistory();
-  const [callQuery, { loading, data, called }] = useLazyQuery<
+  const [callQuery, { loading, data }] = useLazyQuery<
     searchRestaurant,
     searchRestaurantVariables
   >(SEARCH_RESTAURANT);
@@ -67,7 +67,6 @@ export const Search = () => {
       },
     });
   }, [callQuery, history, location, query, page]);
-  console.log(loading, data, called);
 
   return (
     <div>
@@ -88,7 +87,7 @@ export const Search = () => {
       </form>
       {!loading && (
         <div className="max-w-screen-2xl pb-20 mx-auto mt-8">
-          <h1 className="text-3xl font-medium mb-5">"{query}"</h1>
+          <h1 className="text-3xl font-medium mb-5">Searching by "{query}"</h1>
           <h2 className="text-lg opacity-50">
             {data?.searchRestaurant.totalResults} Restaurants
           </h2>
