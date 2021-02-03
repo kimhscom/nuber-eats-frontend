@@ -103,7 +103,7 @@ export const CreateAccount = () => {
             <FormError errorMessage={"Please enter a valid email"} />
           )}
           <input
-            ref={register({ required: "Password is required", minLength: 8 })}
+            ref={register({ required: "Password is required" })}
             className="input"
             type="password"
             name="password"
@@ -112,9 +112,6 @@ export const CreateAccount = () => {
           />
           {errors.password?.message && (
             <FormError errorMessage={errors.password?.message} />
-          )}
-          {errors.password?.type === "minLength" && (
-            <FormError errorMessage="Password must be more than 8 characters." />
           )}
           <select
             ref={register({ required: true })}
