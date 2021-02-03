@@ -13,7 +13,7 @@ import {
   loginMutationVariables,
 } from "../__generated__/loginMutation";
 
-const LOGIN_MUTATION = gql`
+export const LOGIN_MUTATION = gql`
   mutation loginMutation($loginInput: LoginInput!) {
     login(input: $loginInput) {
       ok
@@ -99,7 +99,7 @@ export const Login = () => {
             <FormError errorMessage={errors.email?.message} />
           )}
           <input
-            ref={register({ required: "Password is required", minLength: 8 })}
+            ref={register({ required: "Password is required" })}
             className="input"
             type="password"
             name="password"
@@ -108,9 +108,6 @@ export const Login = () => {
           />
           {errors.password?.message && (
             <FormError errorMessage={errors.password?.message} />
-          )}
-          {errors.password?.type === "minLength" && (
-            <FormError errorMessage="Password must be more than 8 characters." />
           )}
           <Button
             canClick={formState.isValid}
