@@ -11,6 +11,7 @@ export const Button: React.FC<IButtonProps> = ({
   loading,
   actionText,
 }) => (
+  // eslint-disable-next-line jsx-a11y/no-redundant-roles
   <button
     role="button"
     className={`text-lg font-medium focus:outline-none text-white py-4  transition-colors ${
