@@ -1,24 +1,36 @@
 describe("Log In", () => {
-  it("should see login page", () => {
-    cy.visit("/").title().should("eq", "Login | Nuber Eats");
-  });
+  const user = cy;
 
-  it("can fill out the form", () => {
-    cy.visit("/")
-      .findByPlaceholderText(/email/i)
-      .type("kimhscom@kakao.com")
-      .findByPlaceholderText(/password/i)
-      .type("12345678")
-      .findByRole("button")
-      .should("not.have.class", "pointer-events-none");
-    // to do (can log in)
+  it("should see login page", () => {
+    user.visit("/").title().should("eq", "Login | Nuber Eats");
   });
 
   it("can see email / password validation errors", () => {
-    cy.visit("/")
-      .findByPlaceholderText(/email/i)
-      .type("wrong@email")
-      .findByRole("alert")
-      .should("have.text", "Please enter a valid email");
+    user.visit("/");
+    user.findByPlaceholderText(/email/i).type("wrong@email");
+    user.findByRole("alert").should("have.text", "Please enter a valid email");
+    user.findByPlaceholderText(/email/i).clear();
+    user.findByRole("alert").should("have.text", "Email is required");
+    user.findByPlaceholderText(/email/i).type("wrong@email.com");
+    user
+      .findByPlaceholderText(/password/i)
+      .type("123123")
+      .clear();
+    user.findByRole("alert").should("have.text", "Password is required");
+  });
+
+  it("can fill out the form", () => {
+    user.visit("/");
+    user.findByPlaceholderText(/email/i).type("kimhscom@kakao.com");
+    user.findByPlaceholderText(/password/i).type("12345678");
+    user
+      .findByRole("button")
+      .should("not.have.class", "pointer-events-none")
+      .click();
+    user.window().its("localStorage.nuber-token").should("be.a", "string");
+  });
+
+  it("sign up", () => {
+    user.visit("/create-account");
   });
 });
