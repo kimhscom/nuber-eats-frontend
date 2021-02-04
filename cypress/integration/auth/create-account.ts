@@ -39,10 +39,6 @@ describe("Create Account", () => {
     user.findByPlaceholderText(/password/i).type("12345678");
     user.findByRole("button").click();
     user.wait(1000);
-    user.title().should("eq", "Login | Nuber Eats");
-    user.findByPlaceholderText(/email/i).type("kimhscom@kakao.com");
-    user.findByPlaceholderText(/password/i).type("12345678");
-    user.findByRole("button").click();
-    user.window().its("localStorage.nuber-token").should("be.a", "string");
+    user.login("kimhscom@kakao.com", "12345678");
   });
 });
