@@ -1,5 +1,5 @@
 import { gql, useMutation } from "@apollo/client";
-import React from "react";
+import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
 import { useHistory, useParams } from "react-router-dom";
@@ -47,14 +47,21 @@ export const AddDish = () => {
       },
     ],
   });
-  const { register, handleSubmit, formState, getValues } = useForm<IForm>({
+  const {
+    register,
+    handleSubmit,
+    formState,
+    getValues,
+    setValue,
+  } = useForm<IForm>({
     mode: "onChange",
   });
 
   const onSubmit = () => {
-    const { name, price, description } = getValues();
+    const { name, price, description, ...rest } = getValues();
+    console.log(rest);
 
-    createDishMutation({
+    /* createDishMutation({
       variables: {
         input: {
           name,
@@ -63,9 +70,23 @@ export const AddDish = () => {
           restaurantId: +restaurantId,
         },
       },
-    });
+    }); */
 
-    history.goBack();
+    // history.goBack();
+  };
+
+  const [optionsNumber, setOptionsNumber] = useState(0);
+
+  const onAddOptionClick = () => {
+    setOptionsNumber((current) => current + 1);
+  };
+
+  const onDeleteClick = (idToDelete: number) => {
+    setOptionsNumber((current) => current - 1);
+    // @ts-ignore
+    setValue(`${idToDelete}-optionName`, "");
+    // @ts-ignore
+    setValue(`${idToDelete}-optionExtra`, "");
   };
 
   return (
@@ -100,6 +121,36 @@ export const AddDish = () => {
           name="description"
           placeholder="Description"
         />
+        <div className="my-10">
+          <h4 className="font-medium mb-3 text-lg">Dish Options</h4>
+          <span
+            className="cursor-pointer text-white bg-gray-900 px-2 py-1 mt-5"
+            onClick={onAddOptionClick}
+          >
+            Add Dish Option
+          </span>
+          {optionsNumber !== 0 &&
+            Array.from(new Array(optionsNumber)).map((_, index) => (
+              <div key={index} className="mt-5">
+                <input
+                  ref={register}
+                  className="py-2 px-4 focus:outline-none mr-3 focus:border-gray-600 border-2"
+                  type="text"
+                  name={`${index}-optionName`}
+                  placeholder="Option Name"
+                />
+                <input
+                  ref={register}
+                  className="py-2 px-4 focus:outline-none focus:border-gray-600 border-2"
+                  type="number"
+                  name={`${index}-optionExtra`}
+                  min={0}
+                  placeholder="Option Extra"
+                />
+                <span onClick={() => onDeleteClick(index)}>Delete Option</span>
+              </div>
+            ))}
+        </div>
         <Button
           loading={loading}
           canClick={formState.isValid}
