@@ -14,6 +14,7 @@ const CREATE_RESTAURANT_MUTATION = gql`
     createRestaurant(input: $input) {
       ok
       error
+      restaurantId
     }
   }
 `;
@@ -28,7 +29,7 @@ interface IFormProps {
 export const AddRestaurant = () => {
   const onCompleted = (data: createRestaurant) => {
     const {
-      createRestaurant: { ok, error },
+      createRestaurant: { ok, restaurantId },
     } = data;
 
     if (ok) {
@@ -40,13 +41,7 @@ export const AddRestaurant = () => {
     createRestaurant,
     createRestaurantVariables
   >(CREATE_RESTAURANT_MUTATION, { onCompleted });
-  const {
-    register,
-    getValues,
-    handleSubmit,
-    formState,
-    errors,
-  } = useForm<IFormProps>({
+  const { register, getValues, handleSubmit, formState } = useForm<IFormProps>({
     mode: "onChange",
   });
   const [uploading, setUploading] = useState(false);
