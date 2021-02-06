@@ -27,6 +27,7 @@ interface IForm {
   name: string;
   price: string;
   description: string;
+  [key: string]: string;
 }
 
 export const AddDish = () => {
@@ -59,33 +60,35 @@ export const AddDish = () => {
 
   const onSubmit = () => {
     const { name, price, description, ...rest } = getValues();
-    console.log(rest);
+    const optionObjects = optionsNumber.map((theId) => ({
+      name: rest[`${theId}-optionName`],
+      extra: +rest[`${theId}-optionExtra`],
+    }));
 
-    /* createDishMutation({
+    createDishMutation({
       variables: {
         input: {
           name,
           price: +price,
           description,
           restaurantId: +restaurantId,
+          options: optionObjects,
         },
       },
-    }); */
+    });
 
-    // history.goBack();
+    history.goBack();
   };
 
-  const [optionsNumber, setOptionsNumber] = useState(0);
+  const [optionsNumber, setOptionsNumber] = useState<number[]>([]);
 
   const onAddOptionClick = () => {
-    setOptionsNumber((current) => current + 1);
+    setOptionsNumber((current) => [Date.now(), ...current]);
   };
 
   const onDeleteClick = (idToDelete: number) => {
-    setOptionsNumber((current) => current - 1);
-    // @ts-ignore
+    setOptionsNumber((current) => current.filter((id) => id !== idToDelete));
     setValue(`${idToDelete}-optionName`, "");
-    // @ts-ignore
     setValue(`${idToDelete}-optionExtra`, "");
   };
 
@@ -129,25 +132,30 @@ export const AddDish = () => {
           >
             Add Dish Option
           </span>
-          {optionsNumber !== 0 &&
-            Array.from(new Array(optionsNumber)).map((_, index) => (
-              <div key={index} className="mt-5">
+          {optionsNumber.length !== 0 &&
+            optionsNumber.map((id) => (
+              <div key={id} className="mt-5">
                 <input
                   ref={register}
                   className="py-2 px-4 focus:outline-none mr-3 focus:border-gray-600 border-2"
                   type="text"
-                  name={`${index}-optionName`}
+                  name={`${id}-optionName`}
                   placeholder="Option Name"
                 />
                 <input
                   ref={register}
                   className="py-2 px-4 focus:outline-none focus:border-gray-600 border-2"
                   type="number"
-                  name={`${index}-optionExtra`}
+                  name={`${id}-optionExtra`}
                   min={0}
                   placeholder="Option Extra"
                 />
-                <span onClick={() => onDeleteClick(index)}>Delete Option</span>
+                <span
+                  className="cursor-pointer text-white bg-red-500 ml-3 py-3 px-4 mt-5"
+                  onClick={() => onDeleteClick(id)}
+                >
+                  Delete Option
+                </span>
               </div>
             ))}
         </div>
