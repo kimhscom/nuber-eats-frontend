@@ -9,7 +9,9 @@ interface IDishProps {
   isCustomer?: boolean;
   orderStarted?: boolean;
   options?: restaurant_restaurant_restaurant_menu_options[] | null;
-  addItemToOrder: (dishId: number) => void;
+  addItemToOrder?: (dishId: number) => void;
+  removeFromOrder?: (dishId: number) => void;
+  isSelected?: boolean;
 }
 
 export const Dish: React.FC<IDishProps> = ({
@@ -21,11 +23,26 @@ export const Dish: React.FC<IDishProps> = ({
   orderStarted = false,
   options,
   addItemToOrder,
+  removeFromOrder,
+  isSelected,
 }) => {
+  const onClick = () => {
+    if (orderStarted) {
+      if (!isSelected && addItemToOrder) {
+        return addItemToOrder(id);
+      }
+      if (isSelected && removeFromOrder) {
+        return removeFromOrder(id);
+      }
+    }
+  };
+
   return (
     <div
-      className="px-8 py-4 border cursor-pointer hover:border-gray-800 transition-all"
-      onClick={() => (orderStarted ? addItemToOrder(id) : null)}
+      className={`px-8 py-4 border cursor-pointer transition-all ${
+        isSelected ? "border-gray-800" : "hover:border-gray-800"
+      }`}
+      onClick={onClick}
     >
       <div className="mb-5">
         <h3 className="text-lg font-medium ">{name}</h3>
