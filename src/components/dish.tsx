@@ -8,7 +8,7 @@ interface IDishProps {
 
 export const Dish: React.FC<IDishProps> = ({ name, description, price }) => {
   return (
-    <div className=" px-8 py-4 border cursor-pointer hover:border-gray-800 transition-all ">
+    <div className="px-8 py-4 border cursor-pointer hover:border-gray-800 transition-all">
       <div className="mb-5">
         <h3 className="text-lg font-medium ">{name}</h3>
         <h4 className="font-medium">{description}</h4>
