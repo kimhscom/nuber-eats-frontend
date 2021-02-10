@@ -59,6 +59,41 @@ export const Dashboard = () => {
     setMaps(maps);
   };
 
+  const onGetRouteClick = () => {
+    if (map) {
+      const directionsService = new google.maps.DirectionsService();
+      const directionsRenderer = new google.maps.DirectionsRenderer({
+        polylineOptions: {
+          strokeColor: "#000",
+          strokeOpacity: 1,
+          strokeWeight: 5,
+        },
+      });
+
+      directionsRenderer.setMap(map);
+      directionsService.route(
+        {
+          origin: {
+            location: new google.maps.LatLng(
+              driverCoords.lat,
+              driverCoords.lng
+            ),
+          },
+          destination: {
+            location: new google.maps.LatLng(
+              driverCoords.lat + 0.01,
+              driverCoords.lng + 0.01
+            ),
+          },
+          travelMode: google.maps.TravelMode.TRANSIT,
+        },
+        (result) => {
+          directionsRenderer.setDirections(result);
+        }
+      );
+    }
+  };
+
   return (
     <div>
       <div
@@ -72,12 +107,12 @@ export const Dashboard = () => {
             lng: 126.97,
           }}
           defaultZoom={16}
+          draggable={true}
           yesIWantToUseGoogleMapApiInternals
           onGoogleApiLoaded={onApiLoaded}
-        >
-          <Driver lat={driverCoords.lat} lng={driverCoords.lng} />
-        </GoogleMapReact>
+        ></GoogleMapReact>
       </div>
+      <button onClick={onGetRouteClick}>Get route</button>
     </div>
   );
 };
